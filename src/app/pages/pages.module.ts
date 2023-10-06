@@ -11,12 +11,16 @@ import { CartComponent } from './cart/cart.component';
 import { NavModule } from '../nav/nav.module';
 import { ReduceTextPipe } from '../pipes/reduce-text/reduce-text.pipe';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormComponent } from './form/form.component';
 
 
 @NgModule({
   imports: [
     BrowserModule,
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     NavModule,
     PagesRoutingModule,
     HttpClientModule
@@ -26,6 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent,
     CartComponent,
     ReduceTextPipe,
+    FormComponent
   ],
   exports: [
     PagesComponent,

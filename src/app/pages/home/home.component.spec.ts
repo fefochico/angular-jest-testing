@@ -44,6 +44,8 @@ const bookServiceMock ={
     getBooks: ()=> of(listBook)
 }
 
+const mockDocument = { defaultView: {alert: ()=> null }};
+
 describe('Home component', ()=>{
     let component: HomeComponent;
     let fixture: ComponentFixture<HomeComponent>;
@@ -57,11 +59,14 @@ describe('Home component', ()=>{
             ],
             declarations:[HomeComponent, ReducePipeMock],
             providers:[
-                //BookService
                 {
                     provide: BookService,
                     useValue: 
                         bookServiceMock
+                },
+                {
+                    provide: DOCUMENT,
+                    useExisting: mockDocument,
                 }
             ],
             schemas:[CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
@@ -81,11 +86,15 @@ describe('Home component', ()=>{
     });
 
     it('getBooks get books from subscription', ()=>{
-        const bookService=fixture.debugElement.injector.get(BookService);
-        //const spy1= jest.spyOn(bookService, 'getBooks').mockReturnValueOnce(of(listBook));
         component.getBooks();
-        //expect(spy1).toHaveBeenCalledTimes(1);
         expect(component.listBook.length).toBe(3);
         expect(component.listBook).toEqual(listBook);
     });
-})
+
+    //Test de windows.alert o this.document
+    it('test alert', () => {
+        const spy= jest.spyOn(Document.defaultView, 'alert').mockImplementation(() => null);
+        component.ngOnInit();
+        expect(spy).toHaveBeenCalled()
+    });
+});

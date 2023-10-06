@@ -2,8 +2,9 @@ import { CartComponent } from "./cart.component";
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BookService } from "../../services/book.service";
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement, NO_ERRORS_SCHEMA, inject } from "@angular/core";
 import { Book } from "../../models/book.model";
+import { By } from "@angular/platform-browser";
 
 //xit, xdescribe se salta el test o grupo de test
 //fit, fdescribe solo se realizan los que tiene f
@@ -75,6 +76,11 @@ describe('Cart component', ()=>{
     it('should create', ()=>{
         expect(component).toBeTruthy();
     });
+
+    //Forma alternativa de hacer test pero CartComponent debe ir en provider en vez de declaration
+    // it('should create', inject([CartComponent], (component2: CartComponent) => {
+    //     expect(component2).toBeTruthy()
+    // }));
 
     //Test funcion
     it('getTotalPrice returns an amount', ()=>{
@@ -149,4 +155,24 @@ describe('Cart component', ()=>{
         expect(component.listCartBook.length).toBe(0);
         expect(spy1).toHaveBeenCalledTimes(1);
     });
+
+    //Test de integracion
+    it('The title The cart is empty is not displayed when there is a list', ()=> {
+        component.listCartBook = listBook;
+        fixture.detectChanges();
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('#titleCartEmpty'));
+        expect(debugElement).toBeFalsy();
+    })
+
+    //Test de integracion
+    it('The title The cart is empty is displayed when the list is empty', ()=> {
+        component.listCartBook = [];
+        fixture.detectChanges();
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('#titleCartEmpty'));
+        expect(debugElement).toBeTruthy();
+        if(debugElement){
+            const element: HTMLElement = debugElement.nativeElement;
+            expect(element.innerHTML).toContain("The cart is empty");
+        }
+    })
 })
