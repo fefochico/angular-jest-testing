@@ -13,6 +13,7 @@ import { ReduceTextPipe } from '../pipes/reduce-text/reduce-text.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormComponent } from './form/form.component';
+import { ConfirmationDialogModule } from '../dialogs/confirmation-dialog/confirmation-dialog.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { FormComponent } from './form/form.component';
     ReactiveFormsModule,
     NavModule,
     PagesRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ConfirmationDialogModule,
   ],
   declarations: [
     PagesComponent,
