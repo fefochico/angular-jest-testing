@@ -5,6 +5,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Pipe, PipeTransform } from "@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { Book } from "../../models/book.model";
 import { of } from "rxjs";
+import { DOCUMENT } from "@angular/common";
 
 // En este caso hemos anadido un mock del BookService, 
 // es muy util cuando a lo largo del test
@@ -44,7 +45,6 @@ const bookServiceMock ={
     getBooks: ()=> of(listBook)
 }
 
-const mockDocument = { defaultView: {alert: ()=> null }};
 
 describe('Home component', ()=>{
     let component: HomeComponent;
@@ -65,8 +65,8 @@ describe('Home component', ()=>{
                         bookServiceMock
                 },
                 {
-                    provide: DOCUMENT,
-                    useExisting: mockDocument,
+                    provide: Document,
+                    useExisting: DOCUMENT,
                 }
             ],
             schemas:[CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
@@ -93,7 +93,9 @@ describe('Home component', ()=>{
 
     //Test de windows.alert o this.document
     it('test alert', () => {
-        const spy= jest.spyOn(Document.defaultView, 'alert').mockImplementation(() => null);
+        const document= TestBed.inject(Document)
+        const doc= document.defaultView!;
+        const spy= jest.spyOn(doc, 'alert').mockImplementation(() => null);
         component.ngOnInit();
         expect(spy).toHaveBeenCalled()
     });
